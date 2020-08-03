@@ -16,7 +16,11 @@
 /*
  * Name translation for peripherals with only one type of access available.
  */
+<<<<<<< HEAD
 #ifndef NRF_TRUSTZONE_NONSECURE
+=======
+#if !defined(NRF_TRUSTZONE_NONSECURE) && defined(CONFIG_ARM_TRUSTZONE_M)
+>>>>>>> cryptocell_support_for_nrf52
 #define NRF_CRYPTOCELL   NRF_CRYPTOCELL_S
 #endif
 
