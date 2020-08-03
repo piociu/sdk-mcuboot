@@ -300,6 +300,10 @@ bootutil_get_img_security_cnt(struct image_header *hdr,
 }
 #endif /* MCUBOOT_HW_ROLLBACK_PROT */
 
+#define FLASH_PROGRAM_UNIT                          0x04
+#define FLASH_ALIGNMENT_MASK                        (FLASH_PROGRAM_UNIT - 1)
+#define FLASH_ALIGN(size)     ((size + FLASH_ALIGNMENT_MASK) & ~FLASH_ALIGNMENT_MASK)
+
 /*
  * Verify the integrity of the image.
  * Return non-zero if image could not be validated/does not validate.
@@ -421,7 +425,9 @@ bootutil_img_validate(struct enc_key_data *enc_state, int image_index,
             if (!EXPECTED_SIG_LEN(len) || len > sizeof(buf)) {
                 return -1;
             }
-            rc = flash_area_read(fap, off, buf, len);
+
+            int len_aligned = FLASH_ALIGN(len);
+            rc = flash_area_read(fap, off, buf, len_aligned);
             if (rc) {
                 return -1;
             }
